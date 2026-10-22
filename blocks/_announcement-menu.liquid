@@ -1,0 +1,36 @@
+{% assign menu = block.settings.menu %}
+
+{% if menu != blank %}
+  <nav class="announcement-bar__menu" aria-label="{{ menu.title | escape }}" {{ block.shopify_attributes }}>
+    <ul class="announcement-bar__menu-list">
+      {% for link in menu.links %}
+        <li>
+          <a
+            class="announcement-bar__menu-link"
+            href="{{ link.url }}"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{- link.title | escape -}}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:names.menu",
+  "tag": null,
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:settings.menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}
