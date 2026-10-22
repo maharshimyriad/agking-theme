@@ -1,21 +1,27 @@
-{% assign menu = block.settings.menu %}
+{%- capture menu_items -%}
+  {%- for menu_item_index in (1..5) -%}
+    {%- liquid
+      assign label_key = 'link_' | append: menu_item_index | append: '_label'
+      assign url_key = 'link_' | append: menu_item_index | append: '_url'
+      assign menu_item_label = block.settings[label_key]
+      assign menu_item_url = block.settings[url_key]
+    -%}
+    {%- if menu_item_label != blank -%}
+      <li>
+        {% if menu_item_url != blank %}
+          <a class="announcement-bar__menu-link" href="{{ menu_item_url }}">{{ menu_item_label | escape }}</a>
+        {% else %}
+          <span class="announcement-bar__menu-link">{{ menu_item_label | escape }}</span>
+        {% endif %}
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
 
-{% if menu != blank %}
-  <nav class="announcement-bar__menu" aria-label="{{ menu.title | escape }}" {{ block.shopify_attributes }}>
-    <ul class="announcement-bar__menu-list">
-      {% for link in menu.links %}
-        <li>
-          <a
-            class="announcement-bar__menu-link"
-            href="{{ link.url }}"
-            {% if link.current %}
-              aria-current="page"
-            {% endif %}
-          >
-            {{- link.title | escape -}}
-          </a>
-        </li>
-      {% endfor %}
+{% if menu_items != blank %}
+  <nav class="announcement-bar__menu" aria-label="{{ 'accessibility.header_navigation_label' | t }}" {{ block.shopify_attributes }}>
+    <ul class="announcement-bar__menu-list" role="list">
+      {{ menu_items }}
     </ul>
   </nav>
 {% endif %}
@@ -26,10 +32,59 @@
   "tag": null,
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:settings.menu",
-      "default": "main-menu"
+      "type": "text",
+      "id": "link_1_label",
+      "label": "Link 1 label",
+      "default": "Resources"
+    },
+    {
+      "type": "url",
+      "id": "link_1_url",
+      "label": "Link 1 destination"
+    },
+    {
+      "type": "text",
+      "id": "link_2_label",
+      "label": "Link 2 label",
+      "default": "Warranty Service"
+    },
+    {
+      "type": "url",
+      "id": "link_2_url",
+      "label": "Link 2 destination"
+    },
+    {
+      "type": "text",
+      "id": "link_3_label",
+      "label": "Link 3 label",
+      "default": "Blogs"
+    },
+    {
+      "type": "url",
+      "id": "link_3_url",
+      "label": "Link 3 destination"
+    },
+    {
+      "type": "text",
+      "id": "link_4_label",
+      "label": "Link 4 label",
+      "default": "Locations"
+    },
+    {
+      "type": "url",
+      "id": "link_4_url",
+      "label": "Link 4 destination"
+    },
+    {
+      "type": "text",
+      "id": "link_5_label",
+      "label": "Link 5 label",
+      "default": "Brochure Download"
+    },
+    {
+      "type": "url",
+      "id": "link_5_url",
+      "label": "Link 5 destination"
     }
   ]
 }

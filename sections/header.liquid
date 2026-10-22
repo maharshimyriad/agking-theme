@@ -102,7 +102,12 @@
   endif
 
   capture actions
-    render 'header-actions', customer_account_menu: section.settings.customer_account_menu, display_style: section.settings.actions_display_style, section: section
+    render 'header-actions',
+      customer_account_menu: section.settings.customer_account_menu,
+      display_style: section.settings.actions_display_style,
+      section: section,
+      show_account: section.settings.show_account,
+      show_cart: section.settings.show_cart
   endcapture
 
   if shop.customer_accounts_enabled
@@ -134,7 +139,7 @@
     endif
   endif
   capture search
-    render 'search', style: search_style, class: search_class, display_style: section.settings.actions_display_style
+    render 'header-product-tools', settings: section.settings, section_id: section.id
   endcapture
 
   # Skip drawer search under specific conditions:
@@ -377,6 +382,13 @@
       --header-actions-font-weight: var(--font-{{ section.settings.actions_font | default: 'heading' }}--weight);
       --header-actions-text-case: {{ section.settings.actions_text_case | default: 'none' }};
     {% endif %}
+    --header-product-search-width: {{ section.settings.product_search_width | default: 205 }}px;
+    --header-product-search-background: {{ section.settings.product_search_background | default: 'var(--color-background)' }};
+    --header-product-search-text: {{ section.settings.product_search_text | default: 'var(--color-foreground)' }};
+    --header-product-search-border: {{ section.settings.product_search_border | default: 'var(--color-border)' }};
+    --header-quote-background: {{ section.settings.quote_button_background | default: 'var(--color-primary-button-background)' }};
+    --header-quote-text: {{ section.settings.quote_button_text | default: 'var(--color-primary-button-text)' }};
+    --header-quote-radius: {{ section.settings.quote_button_radius | default: 4 }}px;
   "
 >
   <div class="header__underlay header__underlay-closed"></div>
@@ -1281,7 +1293,7 @@
           "label": "t:options.direction_end"
         }
       ],
-      "default": "center"
+      "default": "left"
     },
     {
       "type": "header",
@@ -1305,7 +1317,7 @@
           "label": "t:options.direction_end"
         }
       ],
-      "default": "left"
+      "default": "center"
     },
     {
       "type": "select",
@@ -1380,6 +1392,76 @@
       ],
       "default": "top",
       "visible_if": "{{ section.settings.show_search }}"
+    },
+    {
+      "type": "header",
+      "content": "Product search"
+    },
+    {
+      "type": "text",
+      "id": "product_search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search products"
+    },
+    {
+      "type": "range",
+      "id": "product_search_width",
+      "label": "Search width",
+      "min": 140,
+      "max": 360,
+      "step": 10,
+      "unit": "px",
+      "default": 205
+    },
+    {
+      "type": "color",
+      "id": "product_search_background",
+      "label": "Search background"
+    },
+    {
+      "type": "color",
+      "id": "product_search_text",
+      "label": "Search text"
+    },
+    {
+      "type": "color",
+      "id": "product_search_border",
+      "label": "Search border"
+    },
+    {
+      "type": "header",
+      "content": "Quote button"
+    },
+    {
+      "type": "text",
+      "id": "quote_button_label",
+      "label": "Button label",
+      "default": "Get a Quote"
+    },
+    {
+      "type": "url",
+      "id": "quote_button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "quote_button_background",
+      "label": "Button background"
+    },
+    {
+      "type": "color",
+      "id": "quote_button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "range",
+      "id": "quote_button_radius",
+      "label": "Button corner radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 4
     },
     {
       "type": "header",
@@ -1602,6 +1684,18 @@
     {
       "type": "header",
       "content": "t:content.utilities"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account link",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show cart link",
+      "default": false
     },
     {
       "type": "select",
